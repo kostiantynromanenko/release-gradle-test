@@ -1,17 +1,12 @@
+plugins {
+    id 'net.researchgate.release' version '3.0.2'
+}
+
 group 'org.release.test'
 version '1.0.0-SNAPSHOT'
 
-buildscript {
-    repositories {
-        mavenCentral()
-        maven {
-            url 'https://plugins.gradle.org/m2/'
-        }
-    }
-
-    dependencies {
-        classpath 'net.researchgate:gradle-release:3.0.2'
-    }
+repositories {
+    mavenCentral()
 }
 
 def properties = new Properties()
@@ -21,13 +16,10 @@ try {
     logger.warn("Properties not Found!")
 }
 
-
 apply plugin: 'net.researchgate.release'
 
-def releaseBranch = 'release/' + properties['version'];
-
 release {
-    pushReleaseVersionBranch = releaseBranch
+    pushReleaseVersionBranch = ''
     git {
         requireBranch.set('master')
     }
