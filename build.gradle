@@ -1,30 +1,27 @@
-plugins {
-    id 'net.researchgate.release' version '3.0.2'
+group "org.release.test"
+
+buildscript {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath "net.researchgate:gradle-release:3.0.2"
+    }
 }
 
-group 'org.release.test'
+apply plugin: "net.researchgate.release"
 
-repositories {
-    mavenCentral()
-}
-
-def properties = new Properties()
-try {
-    properties.load(new FileInputStream(rootProject.file("gradle.properties")))
-} catch (Exception e) {
-    logger.warn("Properties not Found!")
-}
-
-apply plugin: 'net.researchgate.release'
-
-beforeReleaseBuild
+def devVersionSuffix = "-SNAPSHOT";
 
 release {
+    def releaseVersion = version.replace(devVersionSuffix, "")
     beforeReleaseBuild {
-        println 'Before release task'
+        "git branch release/${releaseVersion}".execute()
     }
     git {
-        requireBranch.set('master')
-        pushToRemote.set('')
+        snapshotSuffix.set(devVersionSuffix)
+        requireBranch.set("master")
+        pushReleaseVersionBranch = "release/${releaseVersion}"
     }
 }
