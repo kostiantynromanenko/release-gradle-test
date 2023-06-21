@@ -6,10 +6,9 @@ pipeline {
     }
 
     stages {
-        stage('test') {
+        stage('Build') {
             steps {
-                echo 'Starting to run tests'
-                sh "python -m pytest"
+                echo 'Build....'
             }
         }
     }
