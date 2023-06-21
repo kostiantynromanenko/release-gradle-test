@@ -20,9 +20,11 @@ apply plugin: 'net.researchgate.release'
 beforeReleaseBuild
 
 release {
+    beforeReleaseBuild {
+        println 'Before release task'
+    }
     git {
         requireBranch.set('master')
-        pushToBranchPrefix.set('release')
         pushToRemote.set('')
     }
 }
