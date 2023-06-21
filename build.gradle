@@ -3,6 +3,7 @@ plugins {
 }
 
 group 'org.release.test'
+version '1.0.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -20,6 +21,7 @@ apply plugin: 'net.researchgate.release'
 beforeReleaseBuild
 
 release {
+    pushReleaseVersionBranch = ''
     git {
         requireBranch.set('master')
         pushToBranchPrefix.set('release')
