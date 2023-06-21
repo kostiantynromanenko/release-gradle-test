@@ -17,6 +17,7 @@ buildscript {
 apply plugin: 'net.researchgate.release'
 
 release {
+    pushReleaseVersionBranch: 'release'
     git {
         requireBranch.set('master')
     }
