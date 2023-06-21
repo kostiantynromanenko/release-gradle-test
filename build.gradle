@@ -24,5 +24,6 @@ release {
     git {
         requireBranch.set('master')
         pushToBranchPrefix.set('release')
+        pushToRemote.set('')
     }
 }
