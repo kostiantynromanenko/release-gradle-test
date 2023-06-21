@@ -14,10 +14,20 @@ buildscript {
     }
 }
 
+def properties = new Properties()
+try {
+    properties.load(new FileInputStream(rootProject.file("gradle.properties")))
+} catch (Exception e) {
+    logger.warn("Properties not Found!")
+}
+
+
 apply plugin: 'net.researchgate.release'
 
+def releaseBranch = 'release/' + properties['version'];
+
 release {
-    pushReleaseVersionBranch: 'release'
+    pushReleaseVersionBranch = releaseBranch
     git {
         requireBranch.set('master')
     }
