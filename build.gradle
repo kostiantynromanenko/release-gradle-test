@@ -21,7 +21,6 @@ apply plugin: 'net.researchgate.release'
 beforeReleaseBuild
 
 release {
-    pushReleaseVersionBranch = ''
     git {
         requireBranch.set('master')
         pushToBranchPrefix.set('release')
