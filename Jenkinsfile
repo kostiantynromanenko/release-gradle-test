@@ -10,13 +10,13 @@ pipeline {
     }
 
     stages {
-       when {
-            allOf {
-                expression { env.BRANCH_NAME == 'master' }
-                expression { params.RELEASE == true }
+       stage('Release') {
+            when {
+                allOf {
+                   expression { env.BRANCH_NAME == 'master' }
+                   expression { params.RELEASE == true }
+                }
             }
-       }
-       stage('Build') {
             steps {
                 echo 'Build....'
             }
