@@ -18,7 +18,9 @@ pipeline {
                 }
             }
             steps {
-                echo 'Build....'
+                withCredentials([gitUsernamePassword(credentialsId: '70ef45f2-c933-442a-9364-71271ffc86d8', gitToolName: 'git-tool')]) {
+                  sh 'git status'
+                }
             }
        }
     }
