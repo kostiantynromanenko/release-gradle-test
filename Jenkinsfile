@@ -40,12 +40,16 @@ pipeline {
                         script: "./gradlew -q getReleaseVersion",
                         returnStdout: true
                     )
+                     def VERSION = sh(
+                        script: "./gradlew -q getVersion",
+                        returnStdout: true
+                     )
                     withCredentials([gitUsernamePassword(credentialsId: "70ef45f2-c933-442a-9364-71271ffc86d8")]) {
                       sh ("""
                         git checkout -b release/${RELEASE_VERSION}
-                        git tag ${version}
+                        git tag ${VERSION}
                         git push origin --tags
-                        git checkout tags/${version}
+                        git checkout tags/${VERSION}
                       """)
                     }
                     buildPlugin {
