@@ -1,4 +1,5 @@
-group "org.release.test"
+group = "org.release.test"
+version = "1.0.1-SNAPSHOT"
 
 buildscript {
     repositories {
@@ -6,22 +7,15 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath "net.researchgate:gradle-release:3.0.2"
+        classpath "com.dipien:semantic-version-gradle-plugin:2.0.0"
     }
 }
 
-apply plugin: "net.researchgate.release"
+apply plugin: "com.dipien.semantic-version"
 
-def devVersionSuffix = "-SNAPSHOT";
-
-release {
-    def releaseVersion = version.replace(devVersionSuffix, "")
-    beforeReleaseBuild {
-        "git branch release/${releaseVersion}".execute()
+tasks.register("getReleaseVersion", {
+    doLast {
+        def releaseVersion = "${version}".substring(0, "${version}".lastIndexOf('.'))
+        print(releaseVersion)
     }
-    git {
-        snapshotSuffix.set(devVersionSuffix)
-        requireBranch.set("master")
-        pushReleaseVersionBranch = "release/${releaseVersion}"
-    }
-}
+})
