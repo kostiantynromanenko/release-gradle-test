@@ -11,6 +11,11 @@ pipeline {
 
     stages {
         stage('Checkout') {
+           when {
+               allOf {
+                  expression { params.RELEASE == false }
+               }
+           }
             steps {
                 scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*')
             }
