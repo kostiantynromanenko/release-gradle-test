@@ -42,9 +42,9 @@ tasks.register("getReleaseVersion", {
     }
 })
 
-tasks.register("getCurrentVersion", {
+tasks.register("getVersion", {
     doLast {
-        print(version)
+        print(project.version)
     }
 })
 
