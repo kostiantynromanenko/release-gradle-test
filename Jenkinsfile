@@ -21,7 +21,11 @@ pipeline {
                        withCredentials([gitUsernamePassword(credentialsId: "70ef45f2-c933-442a-9364-71271ffc86d8")]) {
                            sh "./gradlew incrementVersion --versionIncrementType=PATCH -Psnapshot=false"
                            sh "git add build.gradle"
-                           sh "git commit -m \"[Bump version] New version: ${version}\""
+                            def VERSION = sh(
+                               script: "./gradlew -q getVersion",
+                               returnStdout: true
+                            )
+                           sh "git commit -m \"[Bump version] New version: ${VERSION}\""
                            sh "git push"
                        }
                   }

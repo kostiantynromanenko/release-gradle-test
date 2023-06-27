@@ -44,7 +44,7 @@ tasks.register("getReleaseVersion", {
 
 tasks.register("getVersion", {
     doLast {
-        print(version)
+        print(project.version)
     }
 })
 
