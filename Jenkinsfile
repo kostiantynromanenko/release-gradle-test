@@ -10,6 +10,11 @@ pipeline {
     }
 
     stages {
+        stage('Checkout') {
+            steps {
+                scmSkip(deleteBuild: true, skipPattern:'.*\\[ci skip\\].*')
+            }
+        }
        stage("Build") {
             steps {
                 echo "Build...."
@@ -25,7 +30,7 @@ pipeline {
                                script: "./gradlew -q getVersion",
                                returnStdout: true
                             )
-                           sh "git commit -m \"[Bump version] New version: ${VERSION}\""
+                           sh "git commit -m \"[ci skip] New version: ${VERSION}\""
                            sh "git push origin HEAD:master --force"
                        }
                   }
