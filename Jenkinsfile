@@ -73,9 +73,7 @@ pipeline {
                         git fetch
                         git checkout master
                         ./gradlew incrementVersion --versionIncrementType=MINOR -Psnapshot=false
-                        ls
-                        git status
-                        sh "git add build.gradle"
+                        git add build.gradle
                         """)
                         def NEW_DEV_VERSION = sh(
                            script: "./gradlew -q getVersion",
