@@ -18,14 +18,15 @@ pipeline {
                 }
             }
             steps {
-                withCredentials([gitUsernamePassword(credentialsId: '70ef45f2-c933-442a-9364-71271ffc86d8')]) {
-                  sh 'git status'
-                  sh 'RELEASE_VERSION=$(./gradlew -q getReleaseVersion)'
-                  echo '${env.RELEASE_VERSION}'
-                  sh 'git checkout -b release/$RELEASE_VERSION'
-                  sh 'git branch --show-current'
+                script {
+                    withCredentials([gitUsernamePassword(credentialsId: '70ef45f2-c933-442a-9364-71271ffc86d8')]) {
+                      sh 'git status'
+                      env.RELEASE_VERSION = sh './gradlew -q getReleaseVersion'
+                      echo '${env.RELEASE_VERSION}'
+                      sh 'git checkout -b release/${RELEASE_VERSION}'
+                      sh 'git branch --show-current'
+                    }
                 }
-
             }
        }
     }
