@@ -19,7 +19,6 @@ buildscript {
     }
 
     dependencies {
-        classpath "net.researchgate:gradle-release:3.0.2"
         classpath "com.dipien:semantic-version-gradle-plugin:2.0.0"
     }
 }
@@ -32,7 +31,6 @@ plugins {
 group = "org.release.test"
 version = "1.0.5"
 
-apply plugin: "net.researchgate.release"
 apply plugin: "com.dipien.semantic-version"
 
 tasks.register("getReleaseVersion", {
@@ -70,13 +68,6 @@ tasks.register('packageDistribution', Zip) {
 }
 
 packageDistribution.dependsOn prepareDistribution
-
-release {
-    newVersionCommitMessage = "[Release] - new version: "
-    git {
-        requireBranch.set("master")
-    }
-}
 
 publishing {
     publications {

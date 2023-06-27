@@ -46,6 +46,18 @@ pipeline {
                   }
            }
        }
+       stage("Publish artifact") {
+          when {
+              allOf {
+                 expression { env.BRANCH_NAME ==~ 'release.*' }
+              }
+          }
+          steps {
+              script {
+                sh './gradlew publish'
+              }
+          }
+       }
        stage("Release") {
             when {
                 allOf {
