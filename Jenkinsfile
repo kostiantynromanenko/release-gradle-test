@@ -26,7 +26,7 @@ pipeline {
                                returnStdout: true
                             )
                            sh "git commit -m \"[Bump version] New version: ${VERSION}\""
-                           sh "git push"
+                           sh "git push -u origin HEAD"
                        }
                   }
            }
