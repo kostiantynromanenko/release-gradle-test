@@ -68,14 +68,9 @@ pipeline {
                         git checkout -b release/${RELEASE_VERSION}
                         git tag ${VERSION}
                         git push origin --tags
-                        git checkout tags/${VERSION}
+                        git checkout tags/${VERSION} -b ${VERSION}
+                        ./gradlew publish
                       """)
-                    }
-                    buildPlugin {
-                        args = ['gradle': [
-                          'tasks': ['publish'],
-                          'credentialId': '1e931704-4639-4d11-b40a-4fbed9e87680'
-                        ]]
                     }
                 }
             }
