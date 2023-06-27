@@ -20,14 +20,14 @@ pipeline {
             steps {
                 script {
                     withCredentials([gitUsernamePassword(credentialsId: "70ef45f2-c933-442a-9364-71271ffc86d8")]) {
-                      sh "git status"
                       def RELEASE_VERSION = sh(
-                              script: "./gradlew -q getReleaseVersion | tail -n 1",
-                              returnStdout: true
+                         script: "./gradlew -q getReleaseVersion",
+                         returnStdout: true
                       ).trim()
-                      echo "${RELEASE_VERSION}"
-                      sh "git checkout -b release/${RELEASE_VERSION}"
-                      sh "git branch --show-current"
+                      sh ("""
+                        git checkout -b release/${RELEASE_VERSION}
+                        ./gradlew unSnapshotVersion
+                      """)
                     }
                 }
             }

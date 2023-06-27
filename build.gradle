@@ -1,5 +1,4 @@
 group = "org.release.test"
-version = "1.0.1-SNAPSHOT"
 
 buildscript {
     repositories {
@@ -8,10 +7,13 @@ buildscript {
     }
     dependencies {
         classpath "com.dipien:semantic-version-gradle-plugin:2.0.0"
+        classpath "net.researchgate:gradle-release:3.0.2"
+
     }
 }
 
 apply plugin: "com.dipien.semantic-version"
+apply plugin: "net.researchgate.release"
 
 tasks.register("getReleaseVersion", {
     doLast {
@@ -19,3 +21,9 @@ tasks.register("getReleaseVersion", {
         print(releaseVersion)
     }
 })
+
+release {
+    git {
+        requireBranch.set("master")
+    }
+}
