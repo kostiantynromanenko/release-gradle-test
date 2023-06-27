@@ -70,7 +70,16 @@ pipeline {
                         git push origin release/${RELEASE_VERSION} --tags
                         git checkout tags/${VERSION} -b ${VERSION}
                         ./gradlew publish
-                      """)
+                        git checkout master
+                        ./gradlew incrementVersion --versionIncrementType=MINOR -Psnapshot=false
+                        sh "git add build.gradle"
+                        """)
+                        def NEW_DEV_VERSION = sh(
+                           script: "./gradlew -q getVersion",
+                           returnStdout: true
+                        )
+                        sh "git commit -m \"[ci skip] New post-release version: ${NEW_DEV_VERSION}\""
+                        sh "git push origin HEAD:master --force"
                     }
                 }
             }
