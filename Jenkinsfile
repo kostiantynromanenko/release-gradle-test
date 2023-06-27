@@ -26,10 +26,10 @@ pipeline {
                     withCredentials([gitUsernamePassword(credentialsId: "70ef45f2-c933-442a-9364-71271ffc86d8")]) {
                       sh ("""
                         git checkout -b release/${RELEASE_VERSION}
-                        ./gradlew unSnapshotVersion
                         ./gradlew commitNewVersion
                         ./gradlew createReleaseTag
-                        git push
+                        git push origin release/${RELEASE_VERSION}
+                        git push origin $(git describe --abbrev=0 --tags)
                       """)
                     }
                 }
