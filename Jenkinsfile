@@ -70,6 +70,7 @@ pipeline {
                         git push origin release/${RELEASE_VERSION} --tags
                         git checkout tags/${VERSION} -b ${VERSION}
                         ./gradlew publish
+                        git fetch
                         git checkout master
                         ./gradlew incrementVersion --versionIncrementType=MINOR -Psnapshot=false
                         sh "git add build.gradle"
