@@ -41,7 +41,7 @@ pipeline {
                                returnStdout: true
                             )
                            sh "git commit -m \"[ci skip] New version: ${VERSION}\""
-                           sh "git push origin HEAD:master"
+                           sh "git push origin HEAD:${env.BRANCH_NAME}"
                        }
                   }
            }
