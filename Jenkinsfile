@@ -19,14 +19,17 @@ pipeline {
             }
             steps {
                 script {
+                    def RELEASE_VERSION = sh(
+                        script: "./gradlew -q getReleaseVersion",
+                        returnStdout: true
+                    ).trim()
                     withCredentials([gitUsernamePassword(credentialsId: "70ef45f2-c933-442a-9364-71271ffc86d8")]) {
-                      def RELEASE_VERSION = sh(
-                         script: "./gradlew -q getReleaseVersion",
-                         returnStdout: true
-                      ).trim()
                       sh ("""
                         git checkout -b release/${RELEASE_VERSION}
                         ./gradlew unSnapshotVersion
+                        ./gradlew commitNewVersion
+                        ./gradlew createReleaseTag
+                        git push
                       """)
                     }
                 }
