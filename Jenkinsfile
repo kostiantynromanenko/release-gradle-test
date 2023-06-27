@@ -49,7 +49,7 @@ pipeline {
        stage("Publish artifact") {
           when {
               allOf {
-                 expression { env.BRANCH_NAME ==~ 'release.*' }
+                  expression { env.BRANCH_NAME ==~ 'release.*' }
               }
           }
           steps {
