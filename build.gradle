@@ -1,18 +1,39 @@
-group = "org.release.test"
-
 buildscript {
     repositories {
         mavenCentral()
         gradlePluginPortal()
+        maven {
+            url "${artifactory_contextUrl}/gradle-dev"
+            credentials {
+                username "${artifactory_user}"
+                password "${artifactory_password}"
+            }
+            authentication {
+                basic(BasicAuthentication)
+            }
+            metadataSources {
+                mavenPom()
+                artifact()
+            }
+        }
     }
+
     dependencies {
         classpath "net.researchgate:gradle-release:3.0.2"
-        classpath "com.github.rising3:semver-gradle-plugin:0.8.2"
+        classpath "com.dipien:semantic-version-gradle-plugin:2.0.0"
     }
 }
 
+plugins {
+    id 'java'
+    id 'maven-publish'
+}
+
+group = "org.release.test"
+version = "1.0.0"
+
 apply plugin: "net.researchgate.release"
-apply plugin: "com.github.rising3.semver"
+apply plugin: "com.dipien.semantic-version"
 
 tasks.register("getReleaseVersion", {
     doLast {
@@ -21,9 +42,55 @@ tasks.register("getReleaseVersion", {
     }
 })
 
+tasks.register("getVersion", {
+    doLast {
+        print(version)
+    }
+})
+
+tasks.register('prepareDistribution', Copy) {
+    from(layout.projectDirectory) {
+        exclude "build/**"
+        exclude ".gradle/**"
+        exclude "gradle/**"
+        exclude ".vscode/**"
+        exclude ".gitignore"
+        exclude "gradle*"
+        exclude "Jenkinsfile"
+        include "*/**"
+    }
+    into layout.buildDirectory.dir("toArchive")
+}
+
+tasks.register('packageDistribution', Zip) {
+    archiveFileName = "kong-portal-customization-${version}.zip"
+    destinationDirectory = layout.buildDirectory.dir('dist')
+
+    from layout.buildDirectory.dir("toArchive")
+}
+
+packageDistribution.dependsOn prepareDistribution
+
 release {
     newVersionCommitMessage = "[Release] - new version: "
     git {
         requireBranch.set("master")
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact source: packageDistribution, extension: 'zip'
+        }
+    }
+    repositories {
+        maven {
+            credentials {
+                username artifactory_user
+                password artifactory_password
+            }
+            url = "${artifactory_contextUrl}/gradle-dev-local"
+        }
     }
 }

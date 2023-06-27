@@ -10,6 +10,23 @@ pipeline {
     }
 
     stages {
+       stage("Build") {
+            steps {
+                echo "Build...."
+            }
+       }
+       stage("Update version") {
+           steps {
+                script {
+                       withCredentials([gitUsernamePassword(credentialsId: "70ef45f2-c933-442a-9364-71271ffc86d8")]) {
+                           sh "./gradlew incrementVersion --versionIncrementType=PATCH -Psnapshot=false"
+                           sh "git add build.gradle"
+                           sh "git commit -m \"[Bump version] New version: ${version}\""
+                           sh "git push"
+                       }
+                  }
+           }
+       }
        stage("Release") {
             when {
                 allOf {
@@ -22,15 +39,20 @@ pipeline {
                     def RELEASE_VERSION = sh(
                         script: "./gradlew -q getReleaseVersion",
                         returnStdout: true
-                    ).trim()
+                    )
                     withCredentials([gitUsernamePassword(credentialsId: "70ef45f2-c933-442a-9364-71271ffc86d8")]) {
                       sh ("""
                         git checkout -b release/${RELEASE_VERSION}
-                        ./gradlew commitNewVersion
-                        ./gradlew createReleaseTag
-                        git push origin release/${RELEASE_VERSION}
-                        git push origin $(git describe --abbrev=0 --tags)
+                        git tag ${version}
+                        git push origin --tags
+                        git checkout tags/${version}
                       """)
+                    }
+                    buildPlugin {
+                        args = ['gradle': [
+                          'tasks': ['publish'],
+                          'credentialId': '1e931704-4639-4d11-b40a-4fbed9e87680'
+                        ]]
                     }
                 }
             }
