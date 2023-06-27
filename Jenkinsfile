@@ -67,7 +67,7 @@ pipeline {
                       sh ("""
                         git checkout -b release/${RELEASE_VERSION}
                         git tag ${VERSION}
-                        git push origin --tags
+                        git push origin release/${RELEASE_VERSION} --tags
                         git checkout tags/${VERSION} -b ${VERSION}
                         ./gradlew publish
                       """)
