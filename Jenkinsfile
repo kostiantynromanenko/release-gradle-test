@@ -41,7 +41,7 @@ pipeline {
                                returnStdout: true
                             )
                            sh "git commit -m \"[ci skip] New version: ${VERSION}\""
-                           sh "git push origin HEAD:master --force"
+                           sh "git push origin HEAD:master"
                        }
                   }
            }
@@ -92,7 +92,7 @@ pipeline {
                            returnStdout: true
                         )
                         sh "git commit -m \"[ci skip] New post-release version: ${NEW_DEV_VERSION}\""
-                        sh "git push origin HEAD:master --force"
+                        sh "git push origin HEAD:master"
                     }
                 }
             }
