@@ -21,6 +21,11 @@ pipeline {
             }
        }
        stage("Update version") {
+           when {
+               allOf {
+                  expression { params.RELEASE == false }
+               }
+           }
            steps {
                 script {
                        withCredentials([gitUsernamePassword(credentialsId: "70ef45f2-c933-442a-9364-71271ffc86d8")]) {
